@@ -28,7 +28,7 @@ def gen_script():
     output = subprocess.check_output(args, universal_newlines=True)
     old_env = output.strip()
 
-    command = '{}; echo "{}"; {}'.format(' '.join(sys.argv[1:]), divider, env_reader)
+    command = f"""{' '.join(sys.argv[1:])}; echo "{divider}"; {env_reader}"""
     args = [BASH, '-c', command]
     output = subprocess.check_output(args, universal_newlines=True)
     stdout, new_env = output.split(divider, 1)

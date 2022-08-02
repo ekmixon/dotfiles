@@ -65,7 +65,7 @@ def main():
         print('\n')
         time.sleep(2) # search only allows 30 req/min. https://developer.github.com/v3/search/#rate-limit
         res = G.search_issues(sha)
-        shortsha = sha[0:7]
+        shortsha = sha[:7]
         issue_closed_states = [issue.state == 'closed' for issue in res]
         open_issues = [issue for issue in res if issue.state != 'closed']
 
@@ -85,15 +85,15 @@ def main():
             msg = '🔃  All PRs still open'
             retval = 2
 
-        print('{}{}{} ({}):\n{}'.format(yellow, branch, reset, shortsha, msg))
+        print(f'{yellow}{branch}{reset} ({shortsha}):\n{msg}')
         for issue in open_issues:
-            print('    · "{}" {}{}{}'.format(issue.title, brightblack, issue.html_url, reset))
+            print(f'    · "{issue.title}" {brightblack}{issue.html_url}{reset}')
 
         if retval == 0:
             if DRY_RUN:
-                print('❎  Without --dry-run, would delete branch %s' % branch)
+                print(f'❎  Without --dry-run, would delete branch {branch}')
             else:
-                print('❌  Deleting local branch %s' % branch)
+                print(f'❌  Deleting local branch {branch}')
                 subprocess.check_call(['git', 'branch', '-D', branch])
 
     sys.exit(retval)
